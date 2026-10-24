@@ -1,0 +1,38 @@
+# El manifiesto de la app (instalar en celular) debe ir como JSON, no como texto.
+<IfModule mod_mime.c>
+    AddType application/manifest+json .webmanifest
+</IfModule>
+
+# Sistema interno: que ningún buscador ni Archive.org guarde páginas, PDF o imágenes (también lo pone Laravel).
+<IfModule mod_headers.c>
+    Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # La configuración de PHP (.user.ini) no se entrega como archivo.
+    RewriteRule (^|/)\.user\.ini$ - [F,L]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

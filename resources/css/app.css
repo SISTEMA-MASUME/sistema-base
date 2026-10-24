@@ -1,0 +1,93 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* Instrument Sans (licencia OFL, public/fonts/OFL-instrument-sans.txt), servida desde el propio sistema:
+   sin depender de Google Fonts. Un solo archivo variable 400–700 con las letras del español. */
+@font-face {
+    font-family: 'Instrument Sans';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('/fonts/instrument-sans-latin.woff2') format('woff2');
+}
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-marino: #12235a;
+    --color-marino-claro: #1d3480;
+    --color-naranja: #ef7d22;
+    --color-naranja-oscuro: #d96a12;
+    /* Fondo de las pantallas: gris casi neutro (antes slate-100, más azulado). */
+    --color-fondo: #f5f6f8;
+    /* Tarjetas: una orilla fina y casi nada de sombra (se ven planas y limpias, no "flotando"). */
+    --shadow-sm: 0 0 0 1px rgb(15 23 42 / 0.06), 0 1px 2px 0 rgb(15 23 42 / 0.04);
+    --shadow: 0 0 0 1px rgb(15 23 42 / 0.06), 0 1px 3px 0 rgb(15 23 42 / 0.06);
+}
+
+@layer base {
+    /* Cifras del mismo ancho: los importes quedan alineados en columnas y no "brincan" al cambiar. */
+    /* Instrument Sans trae el espacio entre palabras muy corto: un poco más para leer de corrido. */
+    body { font-variant-numeric: tabular-nums; word-spacing: 0.06em; }
+    /* Foco visible al navegar con teclado, con el naranja de la marca. */
+    :where(a, button, summary, [role=button]):focus-visible { outline: 2px solid var(--color-naranja); outline-offset: 2px; border-radius: 6px; }
+}
+
+@layer components {
+    .campo {
+        @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 transition-colors placeholder:text-slate-500 hover:border-slate-400 focus:border-naranja focus:outline-none focus:ring-2 focus:ring-naranja/40 sm:py-2 sm:text-sm;
+    }
+
+    .etiqueta {
+        @apply mb-1.5 block text-sm font-medium text-slate-700;
+    }
+
+    .error-campo {
+        @apply mt-1 text-sm text-red-600;
+    }
+
+    .btn {
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-base font-semibold transition-colors active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-10 sm:py-2 sm:text-sm;
+    }
+
+    .btn-primario {
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-base font-semibold transition-colors active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-10 sm:py-2 sm:text-sm bg-naranja text-white hover:bg-naranja-oscuro;
+    }
+
+    .btn-secundario {
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-base font-semibold transition-colors active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-10 sm:py-2 sm:text-sm border border-slate-300 bg-white text-slate-800 hover:border-slate-400 hover:bg-slate-50;
+    }
+}
+
+.notas-md ul { list-style: disc; padding-left: 1.25rem; }
+.notas-md ol { list-style: decimal; padding-left: 1.25rem; }
+.notas-md a { color: var(--color-marino); text-decoration: underline; }
+.notas-md p + p, .notas-md ul, .notas-md ol { margin-top: 0.5rem; }
+.notas-md h1, .notas-md h2, .notas-md h3 { font-weight: 700; margin-top: 0.5rem; }
+
+/* Tablero tipo Trello: columnas con desplazamiento horizontal y "snap" (en celular asoma la siguiente). */
+.tablero-scroll { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.tablero-scroll > section { scroll-snap-align: center; }
+@media (min-width: 1024px) {
+    .tablero-scroll { scroll-snap-type: none; }
+    .tablero-scroll::-webkit-scrollbar { height: 14px; }
+    .tablero-scroll::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 7px; }
+    .tablero-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 7px; }
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* Con la tarjeta abierta no se desplaza el tablero de fondo. */
+body:has(.modal-tarjeta) { overflow: hidden; }
+
+/* Barra del menú lateral: delgada y visible sobre el azul marino (laptops con pantalla bajita). */
+.menu-lateral { scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / 0.35) transparent; }
+.menu-lateral::-webkit-scrollbar { width: 8px; }
+.menu-lateral::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.35); border-radius: 9999px; }
+.menu-lateral::-webkit-scrollbar-track { background: transparent; }

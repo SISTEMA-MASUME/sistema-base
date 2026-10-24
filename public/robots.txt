@@ -1,0 +1,9 @@
+# Sistema interno de MASUME: nada de aquí debe aparecer en buscadores ni en archivos de internet.
+User-agent: *
+Disallow: /
+
+User-agent: ia_archiver
+Disallow: /
+
+User-agent: archive.org_bot
+Disallow: /
